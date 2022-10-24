@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,4 +44,22 @@ public class DataPendudukService {
     public List<DataPenduduk> findByName(String name) {
         return dataPendudukRepo.findByNameContains(name);
     }
+
+    public List<DataPenduduk> searchDataPenduduks(String nik, String name) {
+        List<DataPenduduk> datapenduduk = null;
+        // dataPendudukRepo.searchDataPenduduks(query);
+        if (nik != "" && name == "") {
+            datapenduduk = dataPendudukRepo.searchDataPendudukbyNIK(nik);
+        } else if (nik == "" && name != "") {
+            datapenduduk = dataPendudukRepo.searchDataPendudukbyName(name);
+        } else {
+            datapenduduk = dataPendudukRepo.searchDataPendudukbyNIKandName(nik, name);
+        }
+        return datapenduduk;
+    }
+
+    public DataPenduduk create(@Valid DataPenduduk dataPenduduk) {
+        return null;
+    }
+
 }

@@ -7,17 +7,27 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+
+
+
 
 @Entity
 @Table(name = "tbl_dataPenduduk")
 public class DataPenduduk implements Serializable{
 
     @Id
-    @Column(unique = true)
+    @NotEmpty(message = "nik tidak boleh kosong")
+    @Column(nullable = false,unique = true)
     private String nik;
+
+    @NotEmpty(message = "nama tidak boleh kosong")
+    @Column(unique = true)
     private String name;
+
     @Column(length = 500)
     private String address;
+    
     private String gender;
    
     private LocalDate birth;
@@ -26,7 +36,7 @@ public class DataPenduduk implements Serializable{
     public DataPenduduk(){
     }
 
-    public DataPenduduk(String nik, String name, String address, String gender, int years, int capacity, LocalDate birth,
+    public DataPenduduk(String nik, String name, String address, String gender, LocalDate birth,
             String country) {
         this.nik = nik;
         this.name = name;

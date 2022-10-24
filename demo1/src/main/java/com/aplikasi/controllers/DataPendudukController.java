@@ -1,6 +1,12 @@
 package com.aplikasi.controllers;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +27,18 @@ public class DataPendudukController {
 
     @Autowired
     private DataPendudukService DataPendudukService;
+  
 
     @PostMapping
-    public DataPenduduk save(@RequestBody DataPenduduk dataPenduduk){
+    public DataPenduduk create(@Valid @RequestBody DataPenduduk dataPenduduk, Errors errors){
+        
+        if(errors.hasErrors()){
+            for (ObjectError error : errors.getAllErrors()) {
+                System.err.println(error.getDefaultMessage());
+                
+            }
+            throw new RuntimeException("validation errors");
+        }
         return DataPendudukService.save(dataPenduduk);
     }
     
@@ -46,4 +61,10 @@ public class DataPendudukController {
     public void removeOne(@PathVariable("id") String id){
         DataPendudukService.removeOne(id);
     }
+
+    @PostMapping("/search")
+    public List<DataPenduduk> search(@RequestBody DataPenduduk dataPenduduk) {
+        return DataPendudukService.searchDataPenduduks(dataPenduduk.getNik(), dataPenduduk.getName());
+    }
+
 }
